@@ -1,0 +1,9 @@
+html {
+    min-width: 1200px;
+}
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
