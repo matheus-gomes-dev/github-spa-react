@@ -4,31 +4,41 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import GitHub from 'github-api';
+import PropTypes from 'prop-types';
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../../node_modules/font-awesome/css/font-awesome.min.css';
 import '../css/custom.css';
 import Header from '../header/header';
 
-class Home extends Component {
+const gh = new GitHub();
 
+class Home extends Component {
   constructor(props) {
     super(props);
-  }
-
-  componentWillMount() {
-    // basic auth
-    const gh = new GitHub();
-    const clayreimann = gh.getUser('clayreimann');
-    console.log(clayreimann);
-    clayreimann.listStarredRepos()
-      .then(function ({ data: reposJson }) {
-        console.log(reposJson);
-        console.log(`clayreimann has ${reposJson.length} repos!`);
-      });
+    this.state = { userToBeSearched: '' };
+    this.changeUserToBeSearched = this.changeUserToBeSearched.bind(this);
   }
 
   componentDidUpdate() {
-    console.log(this.props);
+    const { userToBeSearched } = this.state;
+    const { searchUser } = this.props;
+    if (searchUser !== userToBeSearched) {
+      this.changeUserToBeSearched(searchUser);
+    }
+  }
+
+  changeUserToBeSearched(user) {
+    // html_url param
+    console.log(user);
+    const searchedUser = gh.getUser(user);
+    searchedUser.listRepos()
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    this.setState({ ...this.state, userToBeSearched: user });
   }
 
   render() {
@@ -38,5 +48,18 @@ class Home extends Component {
   }
 }
 
+
+/* --- props validation --- */
+Home.propTypes = {
+  searchUser: PropTypes.string,
+};
+Home.defaultProps = {
+  searchUser: 'john',
+};
+/* --- end of props validation --- */
+
+
+/* --- redux settings --- */
 const mapStateToProps = state => ({ searchUser: state.header.searchUser });
 export default connect(mapStateToProps, null)(Home);
+/* --- end of redux settings --- */
