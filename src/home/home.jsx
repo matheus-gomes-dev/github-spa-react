@@ -8,13 +8,21 @@ import PropTypes from 'prop-types';
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../../node_modules/font-awesome/css/font-awesome.min.css';
 import '../css/custom.css';
+import HomeStyle from './homeStyle';
+import Loader from '../loader/loader';
+import RepositoriesTable from '../repositoriesTable/repositoriesTable';
 
 const gh = new GitHub();
 
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = { userToBeSearched: '' };
+    this.state = {
+      userToBeSearched: '',
+      homeStatus: 'nothingToShow',
+      showLoader: false,
+      repositoriesArray: [],
+    };
     this.changeUserToBeSearched = this.changeUserToBeSearched.bind(this);
   }
 
@@ -27,22 +35,54 @@ class Home extends Component {
   }
 
   changeUserToBeSearched(user) {
+    this.setState({ ...this.state, userToBeSearched: user, showLoader: true });
     // html_url param
     console.log(user);
     const searchedUser = gh.getUser(user);
     searchedUser.listRepos()
       .then((response) => {
         console.log(response.data);
+        this.setState({
+          ...this.state,
+          homeStatus: 'userFound',
+          showLoader: false,
+          repositoriesArray: response.data,
+        });
       })
       .catch((error) => {
-        console.log(error);
+        this.setState({
+          ...this.state,
+          homeStatus: 'userNotFound',
+          showLoader: false,
+          repositoriesArray: [],
+        });
       });
-    this.setState({ ...this.state, userToBeSearched: user });
   }
 
   render() {
+    const {
+      homeStatus,
+      userToBeSearched,
+      showLoader,
+      repositoriesArray,
+    } = this.state;
     return (
-      null
+      <div >
+        <HomeStyle className="text-center">
+          {(homeStatus === 'nothingToShow' && !showLoader) && <span>No repositories to show...</span>}
+          {(homeStatus === 'userNotFound' && !showLoader) && <span>User {userToBeSearched} was not found...</span>}
+        </HomeStyle>
+        <div className="text-center">
+          {showLoader && <Loader />}
+        </div>
+        { (homeStatus === 'userFound' && !showLoader) &&
+          <div className="container">
+            <h1>{`${userToBeSearched}`}</h1>
+            <br />
+            <RepositoriesTable repos={repositoriesArray} />
+          </div>
+        }
+      </div>
     );
   }
 }
@@ -53,7 +93,7 @@ Home.propTypes = {
   searchUser: PropTypes.string,
 };
 Home.defaultProps = {
-  searchUser: 'john',
+  searchUser: '',
 };
 /* --- end of props validation --- */
 

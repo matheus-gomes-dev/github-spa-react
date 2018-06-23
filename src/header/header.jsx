@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 import StyleNav from './headerStyle';
 import searchUser from './headerActions';
 
@@ -17,7 +18,6 @@ class Header extends Component {
 
   updateSearchUser() {
     const user = this.state.headerInput;
-    console.log(user);
     this.setState({ ...this.state, userToBeSearched: user });
     this.props.searchUser(user);
   }
@@ -34,7 +34,7 @@ class Header extends Component {
           <img width="250" height="102" alt="GitHub" src="http://www.hack.institute/events/connected-car/img/github-logo-white.png" />
         </div>
         <div className="flex-center-div project-description">
-          <i className="fa fa-cog fa-spin fa-fw" aria-hidden="true" />
+          <i className="fa fa-cog fa-fw" aria-hidden="true" />
           <span> Repository Searcher </span>
         </div>
         <div className="flex-center-div form-div">
@@ -58,5 +58,16 @@ class Header extends Component {
   }
 }
 
+/* --- props validation --- */
+Header.propTypes = {
+  searchUser: PropTypes.func,
+};
+Header.defaultProps = {
+  searchUser: null,
+};
+/* --- end of props validation --- */
+
+/* --- redux settings --- */
 const mapDispatchToProps = dispatch => bindActionCreators({ searchUser }, dispatch);
 export default connect(null, mapDispatchToProps)(Header);
+/* --- end of redux settings --- */
