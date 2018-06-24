@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "webpack-dev-server --progress --colors --inline --hot",
     "production": "webpack --progress -p",
-    "build": "webpack"
+    "build": "webpack",
+    "test": "./node_modules/.bin/mocha tests/**/*.spec.js --require babel-register"
   },
   "keywords": [],
   "author": "Matheus Lima <lima.eca@gmail.com> (https://github.com/matheus-lima92)",
@@ -17,9 +18,12 @@
     "babel-loader": "^6.2.10",
     "babel-plugin-react-html-attrs": "^2.0.0",
     "babel-plugin-transform-object-rest-spread": "^6.22.0",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-react": "^6.22.0",
+    "babel-register": "^6.26.0",
     "bootstrap": "^4.0.0",
+    "chai": "^4.1.2",
     "css-loader": "^0.26.1",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
@@ -30,6 +34,7 @@
     "file-loader": "^0.9.0",
     "font-awesome": "^4.7.0",
     "github-api": "^3.0.0",
+    "mocha": "^5.2.0",
     "prop-types": "^15.6.2",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",

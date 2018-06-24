@@ -11,6 +11,7 @@ import '../css/custom.css';
 import HomeStyle from './homeStyle';
 import Loader from '../loader/loader';
 import RepositoriesTable from '../repositoriesTable/repositoriesTable';
+import { filterRepoArray } from '../utils/filterRepos';
 
 const gh = new GitHub();
 
@@ -22,8 +23,11 @@ class Home extends Component {
       homeStatus: 'nothingToShow',
       showLoader: false,
       repositoriesArray: [],
+      visibleRepositories: [],
+      repositoriesFilter: '',
     };
     this.changeUserToBeSearched = this.changeUserToBeSearched.bind(this);
+    this.searchRepo = this.searchRepo.bind(this);
   }
 
   componentDidUpdate() {
@@ -36,27 +40,39 @@ class Home extends Component {
 
   changeUserToBeSearched(user) {
     this.setState({ ...this.state, userToBeSearched: user, showLoader: true });
-    // html_url param
-    console.log(user);
     const searchedUser = gh.getUser(user);
     searchedUser.listRepos()
       .then((response) => {
-        console.log(response.data);
+        response.data.sort((a, b) => (b.stargazers_count - a.stargazers_count));
         this.setState({
           ...this.state,
           homeStatus: 'userFound',
           showLoader: false,
           repositoriesArray: response.data,
+          visibleRepositories: response.data,
         });
       })
-      .catch((error) => {
+      .catch(() => {
         this.setState({
           ...this.state,
           homeStatus: 'userNotFound',
           showLoader: false,
           repositoriesArray: [],
+          visibleRepositories: [],
         });
       });
+  }
+
+  searchRepo(e) {
+    const { repositoriesArray } = this.state;
+    console.log(repositoriesArray);
+    const searchFilter = e.target.value;
+    const filteredRepos = filterRepoArray(repositoriesArray, searchFilter);
+    this.setState({
+      ...this.state,
+      visibleRepositories: filteredRepos,
+      repositoriesFilter: searchFilter,
+    });
   }
 
   render() {
@@ -64,7 +80,8 @@ class Home extends Component {
       homeStatus,
       userToBeSearched,
       showLoader,
-      repositoriesArray,
+      visibleRepositories,
+      repositoriesFilter,
     } = this.state;
     return (
       <div >
@@ -78,8 +95,15 @@ class Home extends Component {
         { (homeStatus === 'userFound' && !showLoader) &&
           <div className="container">
             <h1>{`${userToBeSearched}`}</h1>
+            <input
+              className="form-control"
+              type="text"
+              placeholder="Search user's repositories..."
+              value={repositoriesFilter}
+              onChange={this.searchRepo}
+            />
             <br />
-            <RepositoriesTable repos={repositoriesArray} />
+            <RepositoriesTable repos={visibleRepositories} />
           </div>
         }
       </div>

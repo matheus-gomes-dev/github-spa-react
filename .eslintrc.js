@@ -1,7 +1,8 @@
 module.exports = {
   "extends": "airbnb",
   "env": {
-    "browser": true
+    "browser": true,
+    "mocha": true,
   },
   "settings": {
     "import/alias": {
