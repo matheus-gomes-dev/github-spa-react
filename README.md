@@ -1,6 +1,6 @@
 # GitHub Repository Search
 
-React/Redux SPA library to search repositories by username hosted on GitHub.
+React/Redux SPA to search repositories by username hosted on GitHub.
 
 ![Alt Text](https://media.giphy.com/media/tJODTJEvMCYbqXuePk/giphy.gif)
 
