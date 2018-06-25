@@ -15,7 +15,7 @@ That's it! The application will be running on *http://localhost:8080*. Additiona
 
 # Development
 
-All the React (jsx) and Javascript code has been written following [Airbnb's Style Guide](https://github.com/airbnb/javascript), with [ESLint's](https://eslint.org/) help. React component's CSS attributes are defined with [Styled Components](https://github.com/styled-components/styled-components), which helps to keep the app organized, maintainable and scalable. [Bootstrap 4](https://getbootstrap.com/) has been used to secure responsive behavior.
+All the React (jsx) and Javascript code has been written following [Airbnb's Style Guide](https://github.com/airbnb/javascript), with [ESLint's](https://eslint.org/) help. React component's CSS attributes are defined with [Styled Components](https://github.com/styled-components/styled-components), which helps to keep the app organized, maintainable and scalable. [Github.js](https://github.com/github-tools/github) made ingration with Github's API easy, and [Bootstrap 4](https://getbootstrap.com/) has been used to secure responsive behavior.
 
 # Tests
 
