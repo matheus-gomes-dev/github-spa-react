@@ -11,7 +11,7 @@ import '../css/custom.css';
 import HomeStyle from './homeStyle';
 import Loader from '../loader/loader';
 import RepositoriesTable from '../repositoriesTable/repositoriesTable';
-import { filterRepoArray } from '../utils/filterRepos';
+import filterRepoArray from '../utils/filterRepos';
 
 const gh = new GitHub();
 
@@ -65,7 +65,6 @@ class Home extends Component {
 
   searchRepo(e) {
     const { repositoriesArray } = this.state;
-    console.log(repositoriesArray);
     const searchFilter = e.target.value;
     const filteredRepos = filterRepoArray(repositoriesArray, searchFilter);
     this.setState({
@@ -103,7 +102,7 @@ class Home extends Component {
               onChange={this.searchRepo}
             />
             <br />
-            <RepositoriesTable repos={visibleRepositories} />
+            <RepositoriesTable repos={visibleRepositories} filterText={repositoriesFilter} />
           </div>
         }
       </div>

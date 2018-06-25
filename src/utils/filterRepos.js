@@ -1,17 +1,15 @@
 /* eslint linebreak-style: ["error", "windows"] */
 
-export const filterRepoArray = (repoArray, searchFilter) => {
+export default (repoArray, searchFilter) => {
+  if (!searchFilter) {
+    return repoArray;
+  }
   const filteredRepos = repoArray.filter(repo => (
-    repo.description !== null &&
+    repo.name !== null &&
     (
-      repo.description.toLowerCase().indexOf(searchFilter.toLowerCase()) !== -1 ||
+      (repo.description === null ? 'No description' : repo.description).toLowerCase().indexOf(searchFilter.toLowerCase()) !== -1 ||
       repo.name.toLowerCase().indexOf(searchFilter.toLowerCase()) !== -1
     )
   ));
   return filteredRepos;
-};
-
-
-export const boldFilter = (sentence, filter) => {
-  return null;
 };
