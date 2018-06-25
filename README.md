@@ -2,7 +2,7 @@
 
 React/Redux SPA library to search repositories by username hosted on GitHub.
 
-![Alt Text](https://media.giphy.com/media/ctDC1qRLZSEBSsplmo/giphy.gif)
+![Alt Text](https://media.giphy.com/media/tJODTJEvMCYbqXuePk/giphy.gif)
 
 # Instructions
 
@@ -19,3 +19,7 @@ That's it! The application will be running on *http://localhost:8080*. Additiona
 ```
 npm run test
 ```
+
+# Development
+
+All the React (jsx) and Javascript code has been written following [Airbnb's Style Guide](https://github.com/airbnb/javascript), with [ESLint's](https://eslint.org/) help. React component's CSS attributes are defined with [Styled Components](https://github.com/styled-components/styled-components), which helps to keep the app organized, maintainable and scalable. [Bootstrap 4](https://getbootstrap.com/) has been used to secure responsive behavior.
