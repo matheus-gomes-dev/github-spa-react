@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../../node_modules/font-awesome/css/font-awesome.min.css';
 import '../css/custom.css';
-import HomeStyle from './homeStyle';
+import { HomeStyle, UserStyle } from './homeStyle';
 import Loader from '../loader/loader';
 import RepositoriesTable from '../repositoriesTable/repositoriesTable';
 import filterRepoArray from '../utils/filterRepos';
@@ -25,6 +25,7 @@ class Home extends Component {
       repositoriesArray: [],
       visibleRepositories: [],
       repositoriesFilter: '',
+      userInfos: {},
     };
     this.changeUserToBeSearched = this.changeUserToBeSearched.bind(this);
     this.searchRepo = this.searchRepo.bind(this);
@@ -41,16 +42,20 @@ class Home extends Component {
   changeUserToBeSearched(user) {
     this.setState({ ...this.state, userToBeSearched: user, showLoader: true });
     const searchedUser = gh.getUser(user);
-    searchedUser.listRepos()
-      .then((response) => {
-        response.data.sort((a, b) => (b.stargazers_count - a.stargazers_count));
-        this.setState({
-          ...this.state,
-          homeStatus: 'userFound',
-          showLoader: false,
-          repositoriesArray: response.data,
-          visibleRepositories: response.data,
-        });
+    searchedUser.getProfile()
+      .then((profile) => {
+        searchedUser.listRepos()
+          .then((response) => {
+            response.data.sort((a, b) => (b.stargazers_count - a.stargazers_count));
+            this.setState({
+              ...this.state,
+              homeStatus: 'userFound',
+              showLoader: false,
+              repositoriesArray: response.data,
+              visibleRepositories: response.data,
+              userInfos: profile.data,
+            });
+          });
       })
       .catch(() => {
         this.setState({
@@ -81,6 +86,7 @@ class Home extends Component {
       showLoader,
       visibleRepositories,
       repositoriesFilter,
+      userInfos,
     } = this.state;
     return (
       <div >
@@ -93,16 +99,25 @@ class Home extends Component {
         </div>
         { (homeStatus === 'userFound' && !showLoader) &&
           <div className="container">
-            <h1>{`${userToBeSearched}`}</h1>
-            <input
-              className="form-control"
-              type="text"
-              placeholder="Search user's repositories..."
-              value={repositoriesFilter}
-              onChange={this.searchRepo}
-            />
-            <br />
-            <RepositoriesTable repos={visibleRepositories} filterText={repositoriesFilter} />
+            <div className="row">
+              <UserStyle className="col-md-3 col-sm-12">
+                <img src={userInfos.avatar_url} alt="profile-avatar" className="img-fluid" />
+                <h1>{userInfos.name}</h1>
+                <h2>{userInfos.login}</h2>
+                <h3>{userInfos.bio ? userInfos.bio : ''}</h3>
+              </UserStyle>
+              <div className="col-md-9 col-sm-12">
+                <input
+                  className="form-control"
+                  type="text"
+                  placeholder="Search user's repositories..."
+                  value={repositoriesFilter}
+                  onChange={this.searchRepo}
+                />
+                <br />
+                <RepositoriesTable repos={visibleRepositories} filterText={repositoriesFilter} />
+              </div>
+            </div>
           </div>
         }
       </div>

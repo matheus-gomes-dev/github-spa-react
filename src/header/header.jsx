@@ -35,7 +35,7 @@ class Header extends Component {
         </div>
         <div className="flex-center-div project-description">
           <i className="fa fa-cog fa-fw" aria-hidden="true" />
-          <span> Repository Searcher </span>
+          <span> Repository Search </span>
         </div>
         <div className="flex-center-div form-div">
           <form onSubmit={(e) => { this.updateSearchUser(); e.preventDefault(); }}>
